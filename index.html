@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>test</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+      .hide{
+        display: none;
+      }
+      body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+</head>
+<body>
+<div class="card" style="width: 40rem;">
+  <div class="card-body">
+
+    <div id="titleScreen">
+      <h5 class="card-title">Welcome to my Quiz</h5><br>
+      <h6 class="card-subtitle mb-2 text-muted">Press the button to start</h6><br>
+      <button id='start' type="button" class="btn btn-secondary">Start quiz</button>
+    </div>
+
+    <div id="questionScreen" class = 'hide'>
+      <h5 id = 'questNum' class="card-title">Question#</h5><br>
+      <h6 id='quest' class="card-subtitle mb-2 text-muted">Question</h6><br>
+      <button id='1' type="button" class="btn btn-secondary">answer1</button><br><br>
+      <button id='2' type="button" class="btn btn-secondary">answer2</button><br><br>
+      <button id='3' type="button" class="btn btn-secondary">answer3</button><br><br>
+      <button id='4' type="button" class="btn btn-secondary">answer4</button><br><br>
+    </div>
+  </div>
+  <div id="scorePage" class ="hide">
+    <form>
+      <h1 id= scoreLog></h1>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Initials</label>
+        <input type="email" class="form-control" id="scoreInput" aria-describedby="emailHelp">
+        <small id="emailHelp" class="form-text text-muted">So you know who's score is who's</small>
+      </div>
+      <button id='submitScore' type="submit" class="btn btn-primary">Submit Score to Leaderboard</button>
+    </form>
+    <ul id=leaderBoard class="list-group">
+      <li id=leaderBoard1 class="list-group-item"></li>
+      <li id=leaderBoard2 class="list-group-item"></li>
+      <li id=leaderBoard3 class="list-group-item"></li>
+    </ul>
+  </div>
+  <span id='timer' class="badge badge-dark">Timer: </span>
+</div>
+  <script>
+    let x
+    let score = 0
+    let y = 0
+    let timeT = 0
+    questionarr = [
+     {
+      question: 'Which of these elements is not part of the box model?',
+      answer: ['Border','Padding','Background-Color','Margin']},
+     {
+       question: 'What is JavaScript',
+       answer: ['A styling library', 'An API', 'A functional programing language', 'An HTML file']
+     },
+     {
+       question: 'Where should a nav bar go?',
+       answer: ['The right side', 'The Left side', 'The Top', 'Right in the Middle']
+     },
+     {
+       question: 'Which of these is not used in the grid system',
+       answer: ['row', 'collum', 'sub-row', 'sub-collum']
+     },
+     {
+       question: 'Where should a function go',
+       answer: ['.css file', 'in a div tag ', 'in the script tag', 'where ever it fits']
+     },
+   ]
+   let scores = []
+   function timer(){
+     timeT=60
+     let time = setInterval(() => {
+       timeT = timeT-1
+       document.getElementById('timer').innerText = `Timer: ${timeT}`
+          if (timeT === 0|| x===4) {
+         clearInterval(time)
+         scorePage()
+       }
+     }, 1000);
+   }
+
+   function startQuiz(){
+    document.getElementById('titleScreen').classList.add('hide')
+    document.getElementById('questionScreen').classList.remove('hide')
+    if(y >0){
+      document.getElementById('scorePage').classList.add('hide')
+    }
+    y =y+1
+    x = 0
+    score = 0
+    fillText(x)
+    timer()
+   }
+   function fillText(x){
+    let quest = questionarr[x].question
+    document.getElementById('quest').innerText=quest
+    document.getElementById('questNum').innerText=`Question #${x+1}:`
+    for (i=0 ; i<4 ; i++){
+      let ans = questionarr[x].answer[i]
+      document.getElementById(`${i+1}`).innerText=ans
+    }
+   }
+  function correct(){
+    if(x<4){
+      x = x + 1
+      score = score + 10
+      fillText(x)
+    }
+    else{
+    score = score +10
+    scorePage()}
+  }
+  function wrong(){
+    if(x<4){
+      x = x + 1
+      fillText(x)
+    }
+    else{
+    scorePage()}
+  }
+  function scorePage(){
+    console.log(x)
+    document.getElementById('titleScreen').classList.remove('hide')
+    document.getElementById('questionScreen').classList.add('hide')
+    document.getElementById('scorePage').classList.remove('hide')
+    document.getElementById('scoreLog').innerText=`Congradulations you scored: ${score}`
+
+  }
+
+    document.getElementById('start').addEventListener('click', startQuiz)
+
+    document.getElementById('1').addEventListener('click', wrong)
+    document.getElementById('2').addEventListener('click', wrong)
+    document.getElementById('3').addEventListener('click', correct)
+    document.getElementById('4').addEventListener('click', wrong)
+    
+
+  </script>
+
+</body>
+</html>
